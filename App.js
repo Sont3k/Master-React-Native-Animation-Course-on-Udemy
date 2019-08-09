@@ -4,62 +4,14 @@
  */
 
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Animated,
-  PanResponder,
-  TouchableWithoutFeedback
-} from "react-native";
+import { View, StyleSheet, Animated } from "react-native";
 
 export default class App extends React.Component {
   state = {
-    animation: new Animated.ValueXY(0)
+    animation: new Animated.Value(0)
   };
 
-  componentWillMount() {
-    // this._x = 0;
-    // this._y = 0;
-
-    // this.state.animation.addListener(value => {
-    //   this._x = value.x;
-    //   this._y = value.y;
-    // });
-
-    this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: () => {
-        // this.state.animation.setOffset({
-        //   x: this._x,
-        //   y: this._y
-        // });
-
-        // this.state.animation.setValue({
-        //   x: 0,
-        //   y: 0
-        // });
-        this.state.animation.extractOffset();
-      },
-      onPanResponderMove: Animated.event([
-        null,
-        { dx: this.state.animation.x, dy: this.state.animation.y }
-      ]),
-      onPanResponderRelease: (e, { vx, vy }) => {
-        Animated.decay(this.state.animation, {
-          velocity: {
-            x: vx,
-            y: vy
-          },
-          deceleration: 0.997
-        }).start();
-      }
-    });
-  }
-
-  animatedStyle = {
-    transform: this.state.animation.getTranslateTransform()
-  };
+  animatedStyle = {};
 
   render() {
     return (
@@ -80,9 +32,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
-  },
-  content: {
-    height: 3000
   },
   box: {
     width: 125,
