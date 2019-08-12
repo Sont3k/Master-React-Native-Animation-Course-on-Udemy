@@ -18,7 +18,6 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <Animated.View
           style={[styles.box, this.animatedStyle]}
-          {...this._panResponder.panHandlers}
         >
           <Animated.Text style={styles.textStyle}>Regular Box</Animated.Text>
         </Animated.View>
