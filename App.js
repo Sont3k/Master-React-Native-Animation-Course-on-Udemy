@@ -5,15 +5,15 @@
 
 import React from "react";
 import {
-    View,
-    StyleSheet,
-    Animated,
-    TouchableWithoutFeedback
-} from 'react-native';
+  View,
+  StyleSheet,
+  Animated,
+  TouchableWithoutFeedback
+} from "react-native";
 
 export default class App extends React.Component {
   state = {
-    animation: new Animated.Value(100)
+    animation: new Animated.Value(0)
   };
 
   startAnimation() {
@@ -28,12 +28,20 @@ export default class App extends React.Component {
     });
   }
 
-  arbitraryValue = 50;
+  arbitraryValue = 3;
   // newAnimation = Animated.add(this.state.animation, this.arbitraryValue);
-  newAnimation = Animated.divide(this.state.animation, this.arbitraryValue);
+  // newAnimation = Animated.divide(this.state.animation, this.arbitraryValue);
+  // newAnimation = Animated.multiply(this.state.animation, this.arbitraryValue);
+  newAnimation = Animated.modulo(this.state.animation, this.arbitraryValue);
+
+  interpolated = this.newAnimation.interpolate({
+    inputRange: [0, 3],
+    outputRange: ["0deg", "270deg"]
+  });
 
   animatedStyle = {
-    transform: [{ translateY: this.newAnimation }]
+    // transform: [{ translateY: this.newAnimation }],
+    transform: [{ rotate: this.interpolated }]
   };
 
   render() {
