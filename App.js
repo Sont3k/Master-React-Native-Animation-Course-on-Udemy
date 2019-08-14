@@ -18,12 +18,11 @@ export default class App extends React.Component {
   };
 
   handlePress() {
-    Animated.parallel([
+    Animated.sequence([
       Animated.timing(this.state.colorAnimation, {
         toValue: 1,
         duration: 500
       }),
-
       Animated.timing(this.state.scaleAnimation, {
         toValue: 2,
         duration: 300
