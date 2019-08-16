@@ -18,7 +18,7 @@ export default class App extends React.Component {
   };
 
   handlePress() {
-    Animated.stagger(200, [
+    Animated.sequence([
       Animated.timing(this.state.colorAnimation, {
         toValue: 1,
         duration: 500
@@ -26,7 +26,18 @@ export default class App extends React.Component {
       Animated.timing(this.state.scaleAnimation, {
         toValue: 2,
         duration: 300
-      })
+      }),
+      Animated.delay(1500),
+      Animated.parallel([
+        Animated.timing(this.state.colorAnimation, {
+          toValue: 0,
+          duration: 500
+        }),
+        Animated.timing(this.state.scaleAnimation, {
+          toValue: 1,
+          duration: 300
+        })
+      ])
     ]).start();
   }
 
