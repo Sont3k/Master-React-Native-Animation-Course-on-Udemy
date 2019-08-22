@@ -16,9 +16,28 @@ export default class App extends React.Component {
     animation: new Animated.Value(0)
   };
 
-  startAnimation = () => {};
+  startAnimation = () => {
+    Animated.timing(this.state.animation, {
+      toValue: 1,
+      duration: 1500
+    }).start(() => {
+      this.state.animation.setValue(0);
+    });
+  };
 
-  animatedStyle = {};
+  xInterpolate = this.state.animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"]
+  });
+
+  yInterpolate = this.state.animation.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: ["0deg", "0deg", "180deg"]
+  });
+
+  animatedStyle = {
+    transform: [{ rotateX: this.xInterpolate }, { rotateY: this.yInterpolate }]
+  };
 
   render() {
     return (
