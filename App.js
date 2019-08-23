@@ -13,12 +13,39 @@ import {
 
 export default class App extends React.Component {
   state = {
-    animation: new Animated.Value(0)
+    animation: new Animated.Value(1)
   };
 
-  startAnimation = () => {};
+  startAnimation = () => {
+    Animated.timing(this.state.animation, {
+      toValue: 3,
+      // toValue: 2,
+      duration: 1500
+    }).start(() => {
+      Animated.timing(this.state.animation, {
+        // toValue: 0,
+        toValue: 1,
+        duration: 300
+      }).start();
+    });
+  };
 
-  animatedStyle = {};
+  scaleInterpolate = this.state.animation.interpolate({
+    inputRange: [1, 2],
+    outputRange: [1, 2],
+    // extrapolate: "clamp"
+    // extrapolate: 'identity',
+    // extrapolate: 'extend',
+    extrapolateLeft: "clamp",
+  });
+
+  animatedStyle = {
+    transform: [
+      {
+        scale: this.scaleInterpolate
+      }
+    ]
+  };
 
   render() {
     return (
