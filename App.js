@@ -16,9 +16,25 @@ export default class App extends React.Component {
     animation: new Animated.Value(0)
   };
 
-  startAnimation = () => {};
+  startAnimation = () => {
+    Animated.spring(this.state.animation, {
+      toValue: 300,
+      useNativeDriver: true
+    }).start(() => {
+      this.state.animation.setValue(0);
+    });
 
-  animatedStyle = {};
+    setTimeout(() => {
+      let i = 0;
+      while (i <= 500000000) {
+        i++;
+      }
+    }, 500);
+  };
+
+  animatedStyle = {
+    transform: [{ translateY: this.state.animation }]
+  };
 
   render() {
     return (
