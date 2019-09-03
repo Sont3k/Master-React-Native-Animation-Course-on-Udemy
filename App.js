@@ -4,30 +4,49 @@
  */
 
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Animated,
-  TouchableWithoutFeedback
-} from "react-native";
+import { View, StyleSheet, Animated, Button } from "react-native";
+
+const AnimatedButton = Animated.createAnimatedComponent(Button);
 
 export default class App extends React.Component {
   state = {
     animation: new Animated.Value(0)
   };
 
-  startAnimation = () => {};
+  setNativeProps = props => {
+    this.button.setNativeProps(props);
+  };
+
+  startAnimation = () => {
+    Animated.timing(this.state.animation, {
+      toValue: 1,
+      duration: 1500
+    }).start(() => {
+      Animated.timing(this.state.animation, {
+        toValue: 0,
+        duration: 300
+      }).start();
+    });
+  };
 
   animatedStyle = {};
 
   render() {
+    const animatedColor = this.state.animation.interpolate({
+      inputRange: [0, 1],
+      outputRange: ["rgb(255, 99, 71)", "rgb(99, 71, 255)"]
+    });
+
     return (
       <View style={styles.container}>
-        <TouchableWithoutFeedback onPress={this.startAnimation}>
-          <Animated.View style={[styles.box, this.animatedStyle]}>
-            <Animated.Text style={styles.textStyle}>Regular Box</Animated.Text>
-          </Animated.View>
-        </TouchableWithoutFeedback>
+        <AnimatedButton
+          ref={ref => {
+            this.button = ref;
+          }}
+          onPress={this.startAnimation}
+          title="Regular button"
+          color={animatedColor}
+        />
       </View>
     );
   }
