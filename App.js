@@ -8,26 +8,66 @@ import {
   View,
   StyleSheet,
   Animated,
-  TouchableWithoutFeedback
+  ScrollView,
+  TouchableOpacity,
+  Text
 } from "react-native";
 
 export default class App extends React.Component {
   state = {
     animation: new Animated.Value(0)
   };
+  _enabled = true;
 
-  startAnimation = () => {};
+  handleToggle = () => {
+    this._enabled = !this._enabled;
+    let style = [styles.scroll];
 
-  animatedStyle = {};
+    if (!this._enabled) {
+      style.push(styles.hide);
+    } else {
+      style.push(styles.show);
+    }
+    this.scroll.setNativeProps({
+      scrollEnabled: this._enabled,
+      style
+    });
+  };
 
   render() {
+    const backgroundInterpolate = this.state.animation.interpolate({
+      inputRange: [0, 3000],
+      outputRange: ["rgb(255, 99, 71)", "rgb(99, 71, 255)"]
+    });
+
+    const scrollStyle = {
+      backgroundColor: backgroundInterpolate
+    };
+
     return (
       <View style={styles.container}>
-        <TouchableWithoutFeedback onPress={this.startAnimation}>
-          <Animated.View style={[styles.box, this.animatedStyle]}>
-            <Animated.Text style={styles.textStyle}>Regular Box</Animated.Text>
-          </Animated.View>
-        </TouchableWithoutFeedback>
+        <TouchableOpacity onPress={this.handleToggle}>
+          <Text style={styles.toggleButton}>Toggle</Text>
+        </TouchableOpacity>
+
+        <ScrollView
+          style={styles.scroll}
+          ref={scroll => (this.scroll = scroll)}
+          scrollEventThrottle={16}
+          onScroll={Animated.event([
+            {
+              nativeEvent: {
+                contentOffset: {
+                  y: this.state.animation
+                }
+              }
+            }
+          ])}
+        >
+          <Animated.View
+            style={[styles.fakeContent, scrollStyle]}
+          ></Animated.View>
+        </ScrollView>
       </View>
     );
   }
@@ -36,17 +76,23 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    paddingTop: 50
   },
-  box: {
-    width: 125,
-    height: 125,
-    backgroundColor: "tomato",
-    borderRadius: 10
+  scroll: {
+    flex: 1,
+    opacity: 1
   },
-  textStyle: {
-    marginLeft: 10,
-    marginTop: 10
+  hide: {
+    opacity: 0
+  },
+  show: {
+    opacity: 1
+  },
+  toggleButton: {
+    alignSelf: "center"
+  },
+  fakeContent: {
+    height: 3000,
+    backgroundColor: "tomato"
   }
 });
